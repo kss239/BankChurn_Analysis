@@ -65,7 +65,6 @@ with tab1:
     sns.barplot(x = temp.index,y = temp['Attrited Customer'].values)
     st.pyplot(fig)
 
-    st.write('**Observations:**')
 
 with tab2:
     st.header('Data Preparation')
@@ -103,9 +102,6 @@ with tab2:
     # To impute missing values
     from sklearn.impute import SimpleImputer
 
-    # To help with model building
-    from sklearn.linear_model import LogisticRegression
-
     # To build classification models 
     from sklearn.svm import SVC
     from sklearn.tree import DecisionTreeClassifier
@@ -139,8 +135,8 @@ with tab2:
         st.pyplot(fig)
 
     st.subheader('Logistic Regression')
-
-    lg = LogisticRegression()
+    print('#'*50)
+    lg = LogisticRegression(solver='liblinear',max_iter=250)
     lg.fit(X_train,y_train)
     st.write('train')
     y_pred_train = lg.predict(X_train)
@@ -173,29 +169,33 @@ with tab2:
     plt.ylim([0,1])
     st.pyplot(fig)
 
+    ##Grid Search is taking too long
 
-    hyperparam_grid = {"class_weight": [{0:1,1:4},{0:3,1:7},{0:1,1:3}]
-                    ,"penalty": ["l1", "l2"]
-                    ,"C": np.arange(5, 7, 1)
-                    ,"fit_intercept": [True, False]  }
-    # define model
-    lg3 = LogisticRegression()
-    # define evaluation procedure
-    grid = GridSearchCV(lg3,hyperparam_grid,scoring="precision", cv=100, n_jobs=-1, refit=True)
-    grid.fit(X,y)
-    st.write(f'Best score: {grid.best_score_} with param: {grid.best_params_}')
-    
-    lg3 = LogisticRegression(C=6.0,fit_intercept=True, penalty='l2',class_weight={0: 3, 1: 7} )
-    lg3.fit(X_train,y_train)
-    st.write('train')
-    y_pred_train = lg3.predict(X_train)
-    metrics_score(y_train, y_pred_train)
-    st.write('test')
-    y_pred_test = lg3.predict(X_test)
-    metrics_score(y_test, y_pred_test)
+    # hyperparam_grid = {"class_weight": [{0:1,1:4},{0:3,1:7},{0:1,1:3}]
+    #                 ,"penalty": ["l1", "l2"]
+    #                 ,"C": np.arange(5, 7, 1)
+    #                 ,"fit_intercept": [True, False]  }
+    # # define model
+    # print('$'*50)
+    # lg3 = LogisticRegression(solver='liblinear',max_iter=250)
+    # # define evaluation procedure
+    # print('begin grid search')
+    # grid = GridSearchCV(lg3,hyperparam_grid,scoring="precision", cv=100, n_jobs=-1, refit=True)
+    # print('end grid search & fit grid')
+    # grid.fit(X,y)
+    # print('Fitted Grid')
+    # st.write(f'Best score: {grid.best_score_} with param: {grid.best_params_}')
+    # print('%'*50)
+    # lg3 = LogisticRegression(solver='liblinear',max_iter=250,C=6.0,fit_intercept=True, penalty='l2',class_weight={0: 3, 1: 7} )
+    # lg3.fit(X_train,y_train)
+    # st.write('train')
+    # y_pred_train = lg3.predict(X_train)
+    # metrics_score(y_train, y_pred_train)
+    # st.write('test')
+    # y_pred_test = lg3.predict(X_test)
+    # metrics_score(y_test, y_pred_test)
 
-    st.subheader('Decision Tree')
+    # st.subheader('Decision Tree')
 
-
-st.header('Ending Summary')
-st.write('* We have been able to build a predictive model:\na) that the bank can deploy to identify customers who are at risk of attrition.\nb) that the bank can use to find the key causes that drive attrition. \nc) based on which the bank can take appropriate actions to build better retention policies for customers.\n* Factors that drive attrition - Total_Trans_Ct, Total_Revolving_Bal, Total_Trans_Amt, Total_Relationship_Count\n* Total_Trans_Ct: Less number of transactions in a year leads to attrition of a customer - to increase the usage of cards the bank can provide offers like cashback, special discounts on the purchase of something, etc so that customers feel motivated to use their cards.\n* Total_Revolving_Bal: Customers with less total revolving balance are the ones who attrited, such customers must have cleared their dues and opted out of the credit card service. After the customer has cleared the dues bank can ask for feedback on their experience and get to the cause of attrition.\n* Total_Trans_Amt: Less number of transactions can lead to less transaction amount and eventually leads to customer attrition - Bank can provide offers on the purchase of costlier items which in turn will benefit the customers and bank both.\n* Total_Relationship_Count: Attrition is highest among the customers who are using 1 or 2 products offered by the bank - together they constitute ~55% of the attrition - Bank should investigate here to find the problems customers are facing with these products. Customer support, or more transparency can help in retaining customers.\n* Female customers should be the target customers for any kind of marketing campaign as they are the ones who utilize their credits, make more and higher amount transactions. But their credit limit is less, so increasing the credit limit for such customers can profit the bank.\n* Months_Inactive: As inactivity increases the attrition also increases. 2-4 months of inactivity are the biggest contributors of attrition - Bank can send automated messages to engage customers, these messages can be about their monthly activity, new offers or services, etc.\n* Highest attrition is among the customers who interacted/reached out the most with/to the bank, this indicates that the bank is not able to resolve the problems faced by customers leading to attrition - a feedback collection system can be set up to check if the customers are satisfied with the resolution provided, if not, the bank should act upon it accordingly.')
+    st.header('Ending Summary')
+    st.write('* We have been able to build a predictive model:\na) that the bank can deploy to identify customers who are at risk of attrition.\nb) that the bank can use to find the key causes that drive attrition. \nc) based on which the bank can take appropriate actions to build better retention policies for customers.\n* Factors that drive attrition - Total_Trans_Ct, Total_Revolving_Bal, Total_Trans_Amt, Total_Relationship_Count\n* Total_Trans_Ct: Less number of transactions in a year leads to attrition of a customer - to increase the usage of cards the bank can provide offers like cashback, special discounts on the purchase of something, etc so that customers feel motivated to use their cards.\n* Total_Revolving_Bal: Customers with less total revolving balance are the ones who attrited, such customers must have cleared their dues and opted out of the credit card service. After the customer has cleared the dues bank can ask for feedback on their experience and get to the cause of attrition.\n* Total_Trans_Amt: Less number of transactions can lead to less transaction amount and eventually leads to customer attrition - Bank can provide offers on the purchase of costlier items which in turn will benefit the customers and bank both.\n* Total_Relationship_Count: Attrition is highest among the customers who are using 1 or 2 products offered by the bank - together they constitute ~55% of the attrition - Bank should investigate here to find the problems customers are facing with these products. Customer support, or more transparency can help in retaining customers.\n* Female customers should be the target customers for any kind of marketing campaign as they are the ones who utilize their credits, make more and higher amount transactions. But their credit limit is less, so increasing the credit limit for such customers can profit the bank.\n* Months_Inactive: As inactivity increases the attrition also increases. 2-4 months of inactivity are the biggest contributors of attrition - Bank can send automated messages to engage customers, these messages can be about their monthly activity, new offers or services, etc.\n* Highest attrition is among the customers who interacted/reached out the most with/to the bank, this indicates that the bank is not able to resolve the problems faced by customers leading to attrition - a feedback collection system can be set up to check if the customers are satisfied with the resolution provided, if not, the bank should act upon it accordingly.')
